@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::mpsc::Sender;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct AfterLaunchSchedulerLaunched {}
+pub struct AfterAppvisLaunched {}
 
-impl Trigger for AfterLaunchSchedulerLaunched {
+impl Trigger for AfterAppvisLaunched {
     async fn observe(&self, tx: Sender<Result<()>>) {
         if let Err(e) = tx.send(Ok(())).await {
             error!("failed to send notify: {}", e);

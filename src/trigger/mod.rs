@@ -1,4 +1,4 @@
-use self::{network::WifiConnected, system::AfterLaunchSchedulerLaunched};
+use self::{network::WifiConnected, system::AfterAppvisLaunched};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use tokio::sync::mpsc::Sender;
@@ -15,21 +15,21 @@ pub trait Trigger {
 #[serde(tag = "type", content = "properties")]
 pub enum TriggerKind {
     WifiConnected(WifiConnected),
-    AfterLaunchSchedulerLaunched(AfterLaunchSchedulerLaunched),
+    AfterAppvisLaunched(AfterAppvisLaunched),
 }
 
 impl Trigger for TriggerKind {
     async fn observe(&self, tx: Sender<Result<()>>) {
         match self {
             Self::WifiConnected(t) => t.observe(tx).await,
-            Self::AfterLaunchSchedulerLaunched(t) => t.observe(tx).await,
+            Self::AfterAppvisLaunched(t) => t.observe(tx).await,
         }
     }
 
     fn channel_buffer_size(&self) -> usize {
         match self {
             Self::WifiConnected(t) => t.channel_buffer_size(),
-            Self::AfterLaunchSchedulerLaunched(t) => t.channel_buffer_size(),
+            Self::AfterAppvisLaunched(t) => t.channel_buffer_size(),
         }
     }
 }

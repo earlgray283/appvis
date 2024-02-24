@@ -42,9 +42,7 @@ mod tests {
     use std::{collections::HashMap, time::Duration};
 
     use super::{AppConfig, Config};
-    use crate::trigger::{
-        network::WifiConnected, system::AfterLaunchSchedulerLaunched, TriggerKind,
-    };
+    use crate::trigger::{network::WifiConnected, system::AfterAppvisLaunched, TriggerKind};
 
     #[test]
     fn test_serde() {
@@ -63,9 +61,7 @@ mod tests {
                     "zsh".to_string(),
                     AppConfig {
                         bin_path: "/bin/zsh".to_string(),
-                        trigger: TriggerKind::AfterLaunchSchedulerLaunched(
-                            AfterLaunchSchedulerLaunched {},
-                        ),
+                        trigger: TriggerKind::AfterAppvisLaunched(AfterAppvisLaunched {}),
                     },
                 ),
             ]),
