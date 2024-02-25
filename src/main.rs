@@ -3,6 +3,7 @@ use config::Config;
 use log::{error, info};
 use std::process::{Command, Stdio};
 use tao::event_loop::{ControlFlow, EventLoopBuilder};
+use tao::platform::macos::{ActivationPolicy, EventLoopExtMacOS};
 use tokio::sync::mpsc;
 use tray_icon::menu::{Menu, MenuItem, PredefinedMenuItem};
 use tray_icon::{menu::MenuEvent, TrayIconBuilder, TrayIconEvent};
@@ -50,9 +51,9 @@ async fn main() -> Result<()> {
         handles.push(handle);
     }
 
-    let event_loop = EventLoopBuilder::new().build();
+    let mut event_loop = EventLoopBuilder::new().build();
+    event_loop.set_activation_policy(ActivationPolicy::Prohibited);
     let tray_menu = Menu::new();
-
     let quit_item = MenuItem::new("Quit", true, None);
     tray_menu.append_items(&[&PredefinedMenuItem::separator(), &quit_item])?;
 
