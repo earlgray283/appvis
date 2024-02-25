@@ -5,6 +5,7 @@ edition = "2021"
 description = "manage application launch timing"
 
 [package.metadata.bundle]
+name = "Appvis"
 identifier = "io.github.earlgray283.appvis"
 icon = ["assets/128x128.png"]
 
