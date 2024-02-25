@@ -34,8 +34,10 @@ async fn main() -> Result<()> {
             tokio::spawn(async move {
                 app.trigger.observe(tx).await;
             });
+
             if let Err(e) = rx.recv().await.unwrap() {
                 error!("{}: {}", &name, e);
+                return;
             }
             info!("[{}] got a result from trigger observer", &name);
 
@@ -46,7 +48,10 @@ async fn main() -> Result<()> {
                 .spawn()
             {
                 error!("{}: {}", &name, e);
+                return;
             }
+
+            info!("[{}] successfully launched", &name);
         });
         handles.push(handle);
     }
@@ -69,7 +74,7 @@ async fn main() -> Result<()> {
     let menu_channel = MenuEvent::receiver();
     let tray_channel = TrayIconEvent::receiver();
     event_loop.run(move |_event, _, control_flow| {
-        *control_flow = ControlFlow::Poll;
+        *control_flow = ControlFlow::Wait;
 
         if let Ok(event) = menu_channel.try_recv() {
             if event.id == quit_item.id() {
@@ -81,5 +86,5 @@ async fn main() -> Result<()> {
         if let Ok(event) = tray_channel.try_recv() {
             info!("{:?}", event);
         }
-    })
+    });
 }
